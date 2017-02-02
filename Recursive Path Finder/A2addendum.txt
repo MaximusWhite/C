@@ -1,7 +1,0 @@
-Q: Why do PathAddEntry and PathRemoveEntry return integers?
-A: To indicate if they succeed or fail.
-Q: Does pathfinder read input from a file?
-A: Your pathfinder program reads from stdin. In the example in A2.txt,
-   Linux INPUT REDIRECTION was used to cause the program's stdin to 
-   be attached to a file. But your program doesn't know anything about 
-   this--it just reads from its stdin.

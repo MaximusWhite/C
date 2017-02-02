@@ -1,0 +1,111 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include "vector.h"
+#include "path.h"
+
+int CanGo(int position, Vector *V, int direction){
+
+   if (direction == 1){
+        
+       if (position + V->item[position] < V->size) return 1;
+      return 0;  
+
+   }else {
+
+      if (position - V->item[position] >= 0) return 1;
+      return 0;
+   }
+
+}
+
+
+int AllPathsRec(int position, Vector *V, Path *Solution){
+
+  if (position == V->size-1) {PathAddEntry(Solution, position); PathPrint(*Solution); return 1;}  
+//   if (position == V->size-1) { return 1;}
+
+  if ((position < 0) || (position > V->size-1)) { return 0;}
+
+  if ( isInPath(position, Solution)==1 && position!=0 ) {return 0;}
+   
+  if (((position + V->item[position] <= V->size -1) && (V->item[Solution->item[Solution->end_index]]!= V->item[position])) || (position == 0) ){
+
+  PathAddEntry(Solution, position);  
+   
+  }  
+   
+  if (CanGo(position, V, 1) && CanGo(position, V, 0))  {AddCheckpoint(Solution, position);} 
+  
+  if (isCheckpoint(Solution, position)) {                            //   1 == right, 2 == left, 3 == both  
+    
+   
+  switch (Solution->check_decisions[Solution->check_index]){
+       case 0:  
+       Solution->check_decisions[Solution->check_index] = 1;
+          if (AllPathsRec(position + V->item[position], V, Solution)) {
+ if (AllPathsRec(position - V->item[position], V, Solution)) {
+
+
+   return 1;
+   }
+
+          return 1;
+          }
+ 
+       break; 
+       case 1:  break;
+       case 2:  
+       Solution->check_decisions[Solution->check_index] = 3; 
+         if (AllPathsRec(position + V->item[position], V, Solution)) {
+
+         return 1;
+         }
+
+       break;        
+   }
+
+   
+   if (AllPathsRec(position - V->item[position], V, Solution)) {
+  
+
+   return 1;
+   }
+ 
+  }  
+
+
+ if (AllPathsRec(position + V->item[position], V, Solution)) return 1;
+
+ if (AllPathsRec(position - V->item[position], V, Solution)) return 1;  
+ 
+  
+  if (Solution->check_amount>0) {
+
+  NewPath(Solution);
+  AllPathsRec(Solution->item[Solution->end_index], V, Solution);
+
+  }
+
+}
+
+
+
+   
+int main(int argc, char* args[]){
+
+int i;
+
+Vector *V = malloc(sizeof(Vector*));
+
+Path *P = malloc(sizeof(Path*));
+
+VectorRead(V);
+
+PathInit(P, V->size);
+
+if (!AllPathsRec(0, V, P)) printf("NO SOLUTION\n");
+
+
+
+
+}

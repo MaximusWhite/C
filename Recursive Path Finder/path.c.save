@@ -1,0 +1,68 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include "path.h"
+#include <string.h>
+
+
+void PathInit(Path *P, int size){
+
+ P->size = size;
+ P->item = malloc(sizeof(int) * size);
+ P->end_index =0;
+  
+}
+
+int PathAddEntry(Path *P, int entry ){
+  
+  printf("ENTERING PATH ENTRY ::: so far "); 
+  PathPrint(*P);
+ 
+
+  if (P->end_index< P->size){
+  P->item[P->end_index] = entry; 
+  P->end_index++;
+  
+  printf("EXITING PATH ENTRY ::: now ");
+  PathPrint(*P);
+ 
+
+  return 1;
+  }else {printf(" END_INDEX = %d ::: SIZE = %d\n", P->end_index, P->size); return -1;}
+}
+
+int PathRemoveEntry(Path *P ){
+ 
+
+   if (P->end_index>0) P->end_index--;  
+
+  return 1; 
+
+}
+
+void PathPrint(Path P){
+ 
+ int i;
+
+ printf("Path is : ");
+
+ for (i = 0; i<P.end_index; i++){
+ 
+  printf(" %d", P.item[i]);   
+
+ }
+ printf("\n"); 
+ 
+}
+
+int isInPath(int tgt, Path *P){
+
+  int i;
+for (i = 0; i< P->end_index; i++){
+       
+     if (tgt == P->item[i]) return 1;
+
+}
+   
+ return -1;
+
+}
